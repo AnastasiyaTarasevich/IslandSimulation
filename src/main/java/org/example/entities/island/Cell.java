@@ -1,4 +1,7 @@
-package org.example.entities;
+package org.example.entities.island;
+
+import org.example.entities.Animal;
+import org.example.entities.Plant;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +39,7 @@ public class Cell {
         Map<String, Integer> plantCountMap = new HashMap<>();
 
         for (Animal animal : animals) {
-            animalCountMap.put(animal.unicode, animalCountMap.getOrDefault(animal.unicode, 0) + 1);
+            animalCountMap.put(animal.getUnicode(), animalCountMap.getOrDefault(animal.getUnicode(), 0) + 1);
         }
 
         for (Plant plant : plants) {
