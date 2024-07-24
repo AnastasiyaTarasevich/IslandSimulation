@@ -5,10 +5,7 @@ public class Herbivore extends Animal{
         super(name, unicode, coordinates, weight, maxNumber_onCell, speed_of_movement, sustenance);
     }
 
-    @Override
-    protected void move() {
 
-    }
 
     @Override
     protected void eat() {

@@ -4,6 +4,7 @@ import org.example.entities.Animal;
 import org.example.entities.Coordinate;
 import org.example.entities.Plant;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -25,7 +26,7 @@ public class Island {
     public void populate(List<Animal> animalTypes, List<Plant> plantTypes) {
 
         for (Plant plantType : plantTypes) {
-            int maxPlants =  plantType.getMaxNumber_onCell();
+            int maxPlants = plantType.getMaxNumber_onCell();
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
                     if (ThreadLocalRandom.current().nextBoolean()) { // С вероятностью 50% клетка будет заселена травой
@@ -51,9 +52,10 @@ public class Island {
                         int animalCount = ThreadLocalRandom.current().nextInt(maxAnimals + 1);
                         for (int k = 0; k < animalCount; k++) {
                             try {
+                                Coordinate coordinate = new Coordinate(i, j);
                                 Animal animalInstance = animalType.getClass()
                                         .getDeclaredConstructor(Coordinate.class)
-                                        .newInstance(new Coordinate(i, j));
+                                        .newInstance(coordinate);
                                 grid[i][j].addAnimal(animalInstance);
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -132,5 +134,44 @@ public class Island {
         return maxLines;
     }
 
+
+    public int getSize() {
+        return size;
+    }
+
+
+    public synchronized void performTurn() {
+        List<Animal> allAnimals = getAllAnimals();
+        allAnimals.parallelStream().forEach(animal -> {
+            Coordinate oldCoord = animal.getCoordinates();
+            animal.moveAnimal(this);
+
+            Coordinate newCoord = animal.getCoordinates();
+
+            synchronized (grid[oldCoord.getX()][oldCoord.getY()]) {
+                grid[oldCoord.getX()][oldCoord.getY()].removeAnimal(animal);
+            }
+
+            if (newCoord.getX() >= 0 && newCoord.getX() < size && newCoord.getY() >= 0 && newCoord.getY() < size) {
+                synchronized (grid[newCoord.getX()][newCoord.getY()]) {
+                    grid[newCoord.getX()][newCoord.getY()].addAnimal(animal);
+                }
+            }
+        });
+    }
+
+    private List<Animal> getAllAnimals() {
+        List<Animal> animals = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                animals.addAll(grid[i][j].getAnimals());
+            }
+        }
+        return animals;
+    }
+
+    public Cell getGrid(int x, int y) {
+        return grid[x][y];
+    }
 }
 

@@ -1,5 +1,9 @@
 package org.example.entities;
 
+import org.example.entities.island.Island;
+
+import java.util.concurrent.ThreadLocalRandom;
+
 public abstract class Animal {
 
     protected String name;
@@ -23,8 +27,16 @@ public abstract class Animal {
     }
 
 
-    protected abstract void move();
-
+    protected synchronized void move(Island island) {
+        int currentX = coordinates.getX();
+        int currentY = coordinates.getY();
+        int newX=Math.max(0,Math.min(island.getSize()-1, coordinates.getX()+ ThreadLocalRandom.current().nextInt(-speed_of_movement,speed_of_movement+1)));
+        int newY=Math.max(0,Math.min(island.getSize()-1, coordinates.getY()+ThreadLocalRandom.current().nextInt(-speed_of_movement,speed_of_movement+1)));
+        setCoordinates(new Coordinate(newX,newY));
+    }
+    public void moveAnimal(Island island) {
+        move(island); // Вызов защищенного метода move через публичный метод
+    }
     protected abstract void eat();
 
     protected abstract void reproduce();

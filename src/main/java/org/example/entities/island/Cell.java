@@ -17,8 +17,10 @@ public class Cell {
         plants = new ArrayList<>();
     }
 
-    public void addAnimal(Animal animal) {
-        animals.add(animal);
+    public synchronized void addAnimal(Animal animal) {
+        if (canAddAnimal(animal)) {
+            animals.add(animal);
+        }
     }
 
     public void addPlant(Plant plant) {
@@ -31,6 +33,13 @@ public class Cell {
 
     public List<Plant> getPlants() {
         return plants;
+    }
+    public void clearAnimals() {
+        animals.clear();
+    }
+
+    public void clearPlants() {
+        plants.clear();
     }
 
     @Override
@@ -57,4 +66,15 @@ public class Cell {
 
         return sb.toString();
     }
+
+    public void removeAnimal(Animal animal) {
+        animals.remove(animal);
+    }
+    public synchronized boolean canAddAnimal(Animal animal) {
+        long count = animals.stream()
+                .filter(a -> a.getClass().equals(animal.getClass()))
+                .count();
+        return count < animal.getMaxNumber_onCell();
+    }
+
 }
