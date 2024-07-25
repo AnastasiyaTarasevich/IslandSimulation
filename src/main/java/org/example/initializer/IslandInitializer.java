@@ -1,5 +1,6 @@
 package org.example.initializer;
 
+import org.example.constants.Constants;
 import org.example.entities.Animal;
 import org.example.entities.Coordinate;
 import org.example.entities.Plant;
@@ -41,18 +42,18 @@ public class IslandInitializer {
         animalTypes.add(new Wolf(new Coordinate(0, 0)));
         animalTypes.add(new Boar(new Coordinate(0, 0)));
         animalTypes.add(new Deer(new Coordinate(0, 0)));
-//        animalTypes.add(new Duck(new Coordinate(0,0)));
-//        animalTypes.add(new Bear(new Coordinate(0,0)));
-//        animalTypes.add(new Buffalo(new Coordinate(0,0)));
-//        animalTypes.add(new Caterpillar(new Coordinate(0,0)));
-//        animalTypes.add(new Goat(new Coordinate(0,0)));
-//        animalTypes.add(new Horse(new Coordinate(0,0)));
-//        animalTypes.add(new Mouse(new Coordinate(0,0)));
-//        animalTypes.add(new Rabbit(new Coordinate(0,0)));
-//        animalTypes.add(new Sheep(new Coordinate(0,0)));
-//        animalTypes.add(new Eagle(new Coordinate(0,0)));
-//        animalTypes.add(new Fox(new Coordinate(0,0)));
-//        animalTypes.add(new Snake(new Coordinate(0,0)));
+        animalTypes.add(new Duck(new Coordinate(0,0)));
+        animalTypes.add(new Bear(new Coordinate(0,0)));
+        animalTypes.add(new Buffalo(new Coordinate(0,0)));
+        animalTypes.add(new Caterpillar(new Coordinate(0,0)));
+        animalTypes.add(new Goat(new Coordinate(0,0)));
+        animalTypes.add(new Horse(new Coordinate(0,0)));
+        animalTypes.add(new Mouse(new Coordinate(0,0)));
+        animalTypes.add(new Rabbit(new Coordinate(0,0)));
+        animalTypes.add(new Sheep(new Coordinate(0,0)));
+        animalTypes.add(new Eagle(new Coordinate(0,0)));
+        animalTypes.add(new Fox(new Coordinate(0,0)));
+        animalTypes.add(new Snake(new Coordinate(0,0)));
         plantTypes.add(new Grass());
     }
 
@@ -69,7 +70,7 @@ public class IslandInitializer {
         for (int i = 0; i < nTurns; i++) {
             days++;
             System.out.println("День "+(i+1)+"\n");
-            if(days%3==0)
+            if(days % Constants.TIME_FOR_GROW == 0)
             {
                 addGrass();
             }
@@ -85,9 +86,11 @@ public class IslandInitializer {
     }
 
     private void addGrass() {
-        int x= ThreadLocalRandom.current().nextInt(size);
-        int y=ThreadLocalRandom.current().nextInt(size);
-        Plant grass =new Grass();
-        island.getGrid(x,y).addPlant(grass);
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                Plant grass=new Grass();
+                island.getGrid(i,j).addPlant(grass);
+            }
+        }
     }
 }
