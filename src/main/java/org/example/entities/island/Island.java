@@ -160,9 +160,18 @@ public class Island {
 
         });
         allAnimals.forEach(animal -> animal.eat(this));
+        // Удаление умерших от голода животных
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                Cell cell = grid[i][j];
+                synchronized (cell) {
+                    cell.getAnimals().removeIf(animal -> animal.isStarving());
+                }
+            }
+        }
     }
 
-    private List<Animal> getAllAnimals() {
+    public List<Animal> getAllAnimals() {
         List<Animal> animals = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {

@@ -16,26 +16,36 @@ public class Predator extends Animal {
 
     @Override
     public void eat(Island island) {
-        Cell cell=island.getGrid(coordinates.getX(),coordinates.getY());
+        Cell cell = island.getGrid(coordinates.getX(), coordinates.getY());
         List<Animal> animalsInCell;
+        boolean hasEaten = false;
         synchronized (cell) {
             animalsInCell = new ArrayList<>(cell.getAnimals());
         }
-        for(Animal animal:animalsInCell)
-        {
-            if(!animal.equals(this))
-            {
-                int probability= Constants.getEatProbability(this.getName(),animal.getName());
-                if(ThreadLocalRandom.current().nextInt(100)<probability)
-                {
-                    cell.removeAnimal(animal);
-                    this.resetDaysWithoutFood();
-                    this.weight++;
-                    return;
+        for (Animal animal : animalsInCell) {
+            if (!animal.equals(this)) {
+                int probability = Constants.getEatProbability(this.getName(), animal.getName());
+                if (ThreadLocalRandom.current().nextInt(100) < probability) {
+                    synchronized (cell) {
+                        cell.removeAnimal(animal);
+                        this.resetDaysWithoutFood();
+                        this.foodConsumed += animal.getWeight();
+                        hasEaten = true;
+                        if (this.foodConsumed >= this.sustenance) {
+                            break;
+                        }
+                    }
+
                 }
             }
         }
-        this.addDayWithoutFood();
+        if (hasEaten) {
+            this.resetDaysWithoutFood();
+            this.weight++;
+            this.foodConsumed = 0; // Сбросить количество потребленной пищи после еды
+        } else {
+            this.addDayWithoutFood();
+        }
     }
 
 

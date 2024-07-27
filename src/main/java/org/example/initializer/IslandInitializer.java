@@ -13,7 +13,9 @@ import org.example.entities.plants.Grass;
 import org.example.entities.predators.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class IslandInitializer {
     private int size;
@@ -22,7 +24,7 @@ public class IslandInitializer {
     private List<Animal> animalTypes;
     private List<Plant> plantTypes;
 
-    private int days=0;
+
     public static synchronized IslandInitializer getInstance(int size) {
         if (instance == null) {
             instance = new IslandInitializer(size);
@@ -48,14 +50,14 @@ public class IslandInitializer {
         animalTypes.add(new Bear(new Coordinate(0,0)));
         animalTypes.add(new Buffalo(new Coordinate(0,0)));
         animalTypes.add(new Caterpillar(new Coordinate(0,0)));
-//        animalTypes.add(new Goat(new Coordinate(0,0)));
-//        animalTypes.add(new Horse(new Coordinate(0,0)));
-//        animalTypes.add(new Mouse(new Coordinate(0,0)));
-   //     animalTypes.add(new Rabbit(new Coordinate(0,0)));
-//        animalTypes.add(new Sheep(new Coordinate(0,0)));
-//        animalTypes.add(new Eagle(new Coordinate(0,0)));
-//        animalTypes.add(new Fox(new Coordinate(0,0)));
-//        animalTypes.add(new Snake(new Coordinate(0,0)));
+        animalTypes.add(new Goat(new Coordinate(0,0)));
+        animalTypes.add(new Horse(new Coordinate(0,0)));
+        animalTypes.add(new Mouse(new Coordinate(0,0)));
+        animalTypes.add(new Rabbit(new Coordinate(0,0)));
+        animalTypes.add(new Sheep(new Coordinate(0,0)));
+        animalTypes.add(new Eagle(new Coordinate(0,0)));
+        animalTypes.add(new Fox(new Coordinate(0,0)));
+        animalTypes.add(new Snake(new Coordinate(0,0)));
         plantTypes.add(new Grass());
     }
 
@@ -67,18 +69,13 @@ public class IslandInitializer {
         island.display();
     }
 
-    public void displayIsland(int nTurns)
+    public void displayIsland()
     {
-
-        for (int i = 0; i < nTurns; i++) {
-            if(shouldStopSimulation())
-            {
-                System.out.println("Симуляция закончена из-за выполнения условий остановки");
-                break;
-            }
-            days++;
-            System.out.println("День "+(i+1)+"\n");
-            if(days % Constants.TIME_FOR_GROW == 0)
+        int nTurns=0;
+       while (!shouldStopSimulation()){
+           nTurns++;
+           System.out.println("\nДень "+nTurns+"\n");
+            if(nTurns % Constants.TIME_FOR_GROW == 0)
             {
                 addGrass();
             }
@@ -90,6 +87,11 @@ public class IslandInitializer {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+        if(shouldStopSimulation())
+        {
+            System.out.println("\nСимуляция закончена из-за выполнения условий остановки\n");
+
         }
 
     }
@@ -121,12 +123,22 @@ public class IslandInitializer {
         return count;
     }
 
+    private int getUniqueAnimalTypesCount()
+    {
+        Set<Class<? extends Animal>> uniqueSpecies=new HashSet<>();
+        List<Animal> animals=island.getAllAnimals();
+        for (Animal animal : animals) {
+            uniqueSpecies.add(animal.getClass());
+        }
+        return uniqueSpecies.size();
+    }
+
 
     public boolean shouldStopSimulation()
     {
         int herbivoreCount=getIslandObjectCount(Herbivore.class);
         int predatorCount=getIslandObjectCount(Predator.class);
-        return (herbivoreCount==0 && predatorCount>0);
+        return getUniqueAnimalTypesCount()<=0;
     }
 
 }
