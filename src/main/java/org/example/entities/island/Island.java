@@ -1,8 +1,8 @@
 package org.example.entities.island;
 
-import org.example.entities.Animal;
+import org.example.entities.abstracts.Animal;
 import org.example.entities.Coordinate;
-import org.example.entities.Plant;
+import org.example.entities.abstracts.Plant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -157,7 +157,9 @@ public class Island {
                     grid[newCoord.getX()][newCoord.getY()].addAnimal(animal);
                 }
             }
+
         });
+        allAnimals.forEach(animal -> animal.eat(this));
     }
 
     private List<Animal> getAllAnimals() {

@@ -1,7 +1,13 @@
-package org.example.entities;
+package org.example.entities.abstracts;
 
+import org.example.constants.Constants;
+import org.example.entities.Coordinate;
+import org.example.entities.Herbivore;
+import org.example.entities.island.Cell;
 import org.example.entities.island.Island;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class Animal {
@@ -10,10 +16,15 @@ public abstract class Animal {
     protected String unicode;
     protected Coordinate coordinates;
     protected double weight;
+
+    protected double minWeight;
     protected double maxNumber_onCell;
     protected int speed_of_movement;
 
     protected double sustenance; //кг пищи для насыщения
+
+    protected double foodConsumed;
+    protected int daysWithoutFood;
 
     public Animal(String name, String unicode, Coordinate coordinates,
                   double weight, double maxNumber_onCell, int speed_of_movement, double sustenance) {
@@ -24,6 +35,8 @@ public abstract class Animal {
         this.maxNumber_onCell = maxNumber_onCell;
         this.speed_of_movement = speed_of_movement;
         this.sustenance = sustenance;
+        this.foodConsumed = 0;
+        this.daysWithoutFood=0;
     }
 
 
@@ -37,7 +50,7 @@ public abstract class Animal {
     public void moveAnimal(Island island) {
         move(island); // Вызов защищенного метода move через публичный метод
     }
-    protected abstract void eat();
+    public  abstract void eat(Island island);
 
     protected abstract void reproduce();
 
@@ -96,5 +109,16 @@ public abstract class Animal {
 
     public void setSustenance(double sustenance) {
         this.sustenance = sustenance;
+    }
+    public void addDayWithoutFood()
+    {
+        this.daysWithoutFood++;
+        this.weight-=this.weight*0.1;
+    }
+    public void resetFoodConsumed() {
+        this.foodConsumed = 0;
+    }
+    public void resetDaysWithoutFood() {
+        this.daysWithoutFood = 0;
     }
 }

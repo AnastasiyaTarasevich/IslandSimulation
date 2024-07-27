@@ -1,7 +1,7 @@
 package org.example.entities.island;
 
-import org.example.entities.Animal;
-import org.example.entities.Plant;
+import org.example.entities.abstracts.Animal;
+import org.example.entities.abstracts.Plant;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -77,4 +77,7 @@ public class Cell {
         return count < animal.getMaxNumber_onCell();
     }
 
+    public void removePlant(Plant plant) {
+        plants.remove(plant);
+    }
 }

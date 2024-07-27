@@ -11,8 +11,10 @@ public class Constants {
 
     public static final int TIME_FOR_GROW=3;
     private static final Map<String, Map<String,Integer>> PROBABILITIES_TO_EAT=new HashMap<>();
+
+    public static final int DAYS_WITHOUT_FOOD=3;
     static {
-        loadProbabilitiesFromFile("src/main/resources/probabilities.json");
+        loadProbabilitiesFromFile("src/main/resources/probabilities_for_eating.json");
     }
 
     private static void loadProbabilitiesFromFile(String filePath) {

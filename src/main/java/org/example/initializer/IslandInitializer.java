@@ -1,9 +1,9 @@
 package org.example.initializer;
 
 import org.example.constants.Constants;
-import org.example.entities.Animal;
+import org.example.entities.abstracts.Animal;
 import org.example.entities.Coordinate;
-import org.example.entities.Plant;
+import org.example.entities.abstracts.Plant;
 import org.example.entities.herbivores.*;
 import org.example.entities.island.Island;
 import org.example.entities.plants.Grass;
@@ -11,7 +11,6 @@ import org.example.entities.predators.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class IslandInitializer {
     private int size;
@@ -46,14 +45,14 @@ public class IslandInitializer {
         animalTypes.add(new Bear(new Coordinate(0,0)));
         animalTypes.add(new Buffalo(new Coordinate(0,0)));
         animalTypes.add(new Caterpillar(new Coordinate(0,0)));
-        animalTypes.add(new Goat(new Coordinate(0,0)));
-        animalTypes.add(new Horse(new Coordinate(0,0)));
-        animalTypes.add(new Mouse(new Coordinate(0,0)));
-        animalTypes.add(new Rabbit(new Coordinate(0,0)));
-        animalTypes.add(new Sheep(new Coordinate(0,0)));
-        animalTypes.add(new Eagle(new Coordinate(0,0)));
-        animalTypes.add(new Fox(new Coordinate(0,0)));
-        animalTypes.add(new Snake(new Coordinate(0,0)));
+//        animalTypes.add(new Goat(new Coordinate(0,0)));
+//        animalTypes.add(new Horse(new Coordinate(0,0)));
+//        animalTypes.add(new Mouse(new Coordinate(0,0)));
+   //     animalTypes.add(new Rabbit(new Coordinate(0,0)));
+//        animalTypes.add(new Sheep(new Coordinate(0,0)));
+//        animalTypes.add(new Eagle(new Coordinate(0,0)));
+//        animalTypes.add(new Fox(new Coordinate(0,0)));
+//        animalTypes.add(new Snake(new Coordinate(0,0)));
         plantTypes.add(new Grass());
     }
 

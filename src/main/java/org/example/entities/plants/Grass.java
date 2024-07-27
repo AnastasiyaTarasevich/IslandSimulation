@@ -1,6 +1,6 @@
 package org.example.entities.plants;
 
-import org.example.entities.Plant;
+import org.example.entities.abstracts.Plant;
 
 public class Grass extends Plant {
 
