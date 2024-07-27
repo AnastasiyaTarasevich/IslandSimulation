@@ -121,4 +121,10 @@ public abstract class Animal {
     public void resetDaysWithoutFood() {
         this.daysWithoutFood = 0;
     }
+
+    public boolean isStarving()
+    {
+        double min_weight = Constants.getMinWeight(this.getName());
+        return this.daysWithoutFood>=Constants.DAYS_WITHOUT_FOOD || this.weight<min_weight;
+    }
 }

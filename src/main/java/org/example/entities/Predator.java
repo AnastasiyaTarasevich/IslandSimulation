@@ -29,10 +29,13 @@ public class Predator extends Animal {
                 if(ThreadLocalRandom.current().nextInt(100)<probability)
                 {
                     cell.removeAnimal(animal);
+                    this.resetDaysWithoutFood();
+                    this.weight++;
                     return;
                 }
             }
         }
+        this.addDayWithoutFood();
     }
 
 

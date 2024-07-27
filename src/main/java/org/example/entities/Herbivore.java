@@ -19,6 +19,8 @@ public class Herbivore extends Animal {
     public void eat(Island island) {
         Cell cell=island.getGrid(coordinates.getX(),coordinates.getY());
         List<Plant> plantsInCell;
+
+        boolean hasEaten=false;
         synchronized (cell) {
             plantsInCell = new ArrayList<>(cell.getPlants());
         }
@@ -28,28 +30,47 @@ public class Herbivore extends Animal {
                 int probability = Constants.getEatProbability(this.getName(), plant.getName());
                 if (ThreadLocalRandom.current().nextInt(100) < probability) {
                     cell.removePlant(plant);
-                    return;
+                    this.resetDaysWithoutFood();
+                    this.foodConsumed+=plant.getWeight();
+                   hasEaten=true;
+                   if(this.foodConsumed>=this.sustenance)
+                       break;
                 }
 
 
             }
         }
-        List<Animal> animalsInCell;
-        synchronized (cell) {
-            animalsInCell = new ArrayList<>(cell.getAnimals());
-        }
+        if(!hasEaten||this.foodConsumed<this.sustenance) {
+            List<Animal> animalsInCell;
+            synchronized (cell) {
+                animalsInCell = new ArrayList<>(cell.getAnimals());
+            }
 
-        for (Animal animal : animalsInCell) {
-            if (!animal.equals(this)) {
-                int probability = Constants.getEatProbability(this.getName(), animal.getName());
-                if (ThreadLocalRandom.current().nextInt(100) < probability) {
-                    synchronized (cell) {
-                        cell.removeAnimal(animal);
+            for (Animal animal : animalsInCell) {
+                if (!animal.equals(this)) {
+                    int probability = Constants.getEatProbability(this.getName(), animal.getName());
+                    if (ThreadLocalRandom.current().nextInt(100) < probability) {
+                        synchronized (cell) {
+                            cell.removeAnimal(animal);
+                            this.resetDaysWithoutFood();
+                            this.foodConsumed+=animal.getWeight();
+                            hasEaten=true;
+                            if(this.foodConsumed>=this.sustenance)
+                            {
+                                break;
+                            }
+                        }
+
                     }
-
-                    return;
                 }
             }
+        }
+        if (hasEaten) {
+            this.resetDaysWithoutFood();
+            this.weight++;
+            this.foodConsumed = 0; // Сбросить количество потребленной пищи после еды
+        } else {
+            this.addDayWithoutFood();
         }
     }
 

@@ -10,6 +10,6 @@ public class Main {
         IslandInitializer app =IslandInitializer.getInstance(6);
         System.out.println("\nНачальное состояние острова\n");
         app.displayInitialIsland();
-        app.displayIsland(30);
+        app.displayIsland(50);
     }
 }

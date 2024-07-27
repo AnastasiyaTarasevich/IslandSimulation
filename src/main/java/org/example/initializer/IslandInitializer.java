@@ -1,10 +1,13 @@
 package org.example.initializer;
 
 import org.example.constants.Constants;
+import org.example.entities.Herbivore;
+import org.example.entities.Predator;
 import org.example.entities.abstracts.Animal;
 import org.example.entities.Coordinate;
 import org.example.entities.abstracts.Plant;
 import org.example.entities.herbivores.*;
+import org.example.entities.island.Cell;
 import org.example.entities.island.Island;
 import org.example.entities.plants.Grass;
 import org.example.entities.predators.*;
@@ -66,7 +69,13 @@ public class IslandInitializer {
 
     public void displayIsland(int nTurns)
     {
+
         for (int i = 0; i < nTurns; i++) {
+            if(shouldStopSimulation())
+            {
+                System.out.println("Симуляция закончена из-за выполнения условий остановки");
+                break;
+            }
             days++;
             System.out.println("День "+(i+1)+"\n");
             if(days % Constants.TIME_FOR_GROW == 0)
@@ -75,6 +84,7 @@ public class IslandInitializer {
             }
             island.performTurn();
             island.display();
+
             try {
                 Thread.sleep(1000); // ожидание 1 секунду между днями
             } catch (InterruptedException e) {
@@ -92,4 +102,31 @@ public class IslandInitializer {
             }
         }
     }
+
+    private <T> int getIslandObjectCount(Class<T> tClass)
+    {
+        int count=0;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                Cell cell=island.getGrid(i,j);
+                for(Object object: cell.getAnimals())
+                {
+                    if(tClass.isInstance(object))
+                    {
+                        count++;
+                    }
+                }
+            }
+        }
+        return count;
+    }
+
+
+    public boolean shouldStopSimulation()
+    {
+        int herbivoreCount=getIslandObjectCount(Herbivore.class);
+        int predatorCount=getIslandObjectCount(Predator.class);
+        return (herbivoreCount==0 && predatorCount>0);
+    }
+
 }
