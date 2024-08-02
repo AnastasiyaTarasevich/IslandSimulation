@@ -11,6 +11,7 @@ import org.example.entities.island.Cell;
 import org.example.entities.island.Island;
 import org.example.entities.plants.Grass;
 import org.example.entities.predators.*;
+import org.example.statistics.Statistics;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -23,6 +24,7 @@ public class IslandInitializer {
     private static IslandInitializer instance;
     private List<Animal> animalTypes;
     private List<Plant> plantTypes;
+    private Statistics statistics=Statistics.getInstance();
 
 
     public static synchronized IslandInitializer getInstance(int size) {
@@ -78,6 +80,7 @@ public class IslandInitializer {
             if(nTurns % Constants.TIME_FOR_GROW == 0)
             {
                 addGrass();
+
             }
             island.performTurn();
             island.display();
@@ -97,12 +100,17 @@ public class IslandInitializer {
     }
 
     private void addGrass() {
+        int count=0;
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 Plant grass=new Grass();
                 island.getGrid(i,j).addPlant(grass);
+              count++;
+
             }
         }
+        statistics.addGrownPlant(count);
+
     }
 
     private <T> int getIslandObjectCount(Class<T> tClass)

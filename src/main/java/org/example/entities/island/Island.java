@@ -3,6 +3,7 @@ package org.example.entities.island;
 import org.example.entities.abstracts.Animal;
 import org.example.entities.Coordinate;
 import org.example.entities.abstracts.Plant;
+import org.example.statistics.Statistics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ public class Island {
 
     private Cell[][] grid;
     private int size;
+    private Statistics statistics=Statistics.getInstance();
 
     public Island(int size) {
         this.size = size;
@@ -35,6 +37,7 @@ public class Island {
                             try {
                                 Plant plantInstance = plantType.getClass().newInstance();
                                 grid[i][j].addPlant(plantInstance);
+
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -141,7 +144,10 @@ public class Island {
 
 
     public synchronized void performTurn() {
+        int initialAnimalCount = getAllAnimals().size();
+        int finalAnimalCount = 0;
         List<Animal> allAnimals = getAllAnimals();
+
         allAnimals.parallelStream().forEach(animal -> {
             Coordinate oldCoord = animal.getCoordinates();
             animal.moveAnimal(this);
@@ -159,18 +165,57 @@ public class Island {
             }
 
         });
-        allAnimals.forEach(animal -> animal.eat(this));
-        // Удаление умерших от голода животных
+        List<Animal> animalsToRemoveFromHunger = new ArrayList<>();
+        allAnimals.forEach(animal -> {
+            animal.eat(this);
+            if (animal.isStarving()) {
+                animalsToRemoveFromHunger.add(animal);
+            }
+        });
+
+
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 Cell cell = grid[i][j];
                 synchronized (cell) {
-                    cell.getAnimals().removeIf(animal -> animal.isStarving());
+                    cell.getAnimals().removeAll(animalsToRemoveFromHunger);
                 }
             }
         }
+
+        List<Animal> allAnimalsAfterHunger = getAllAnimals();
+        int countAfterHunger = allAnimalsAfterHunger.size();
+
+
+        int diedCountFromHunger = initialAnimalCount - countAfterHunger;
+        int diedCountFromPredation = initialAnimalCount - allAnimals.size();
+
+        statistics.addDeadAnimal(diedCountFromHunger + diedCountFromPredation);
+        allAnimals.forEach(animal -> animal.reproduce(this));
+        updateTotalAnimals();
+        updateTotalPlants();
+        System.out.println(statistics.toString());
+        statistics.resetDailyStatistics();
+    }
+    private void updateTotalAnimals() {
+        int totalAnimals = 0;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                totalAnimals += grid[i][j].getAnimals().size();
+            }
+        }
+        statistics.setTotalAnimals(totalAnimals);
     }
 
+    private void updateTotalPlants() {
+        int totalPlants = 0;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                totalPlants += grid[i][j].getPlants().size();
+            }
+        }
+        statistics.setTotalPlants(totalPlants);
+    }
     public List<Animal> getAllAnimals() {
         List<Animal> animals = new ArrayList<>();
         for (int i = 0; i < size; i++) {

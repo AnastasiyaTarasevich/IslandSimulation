@@ -14,10 +14,13 @@ public class Constants {
 
     private static final Map<String,Double> MIN_WEIGHT=new HashMap<>();
 
-    public static final int DAYS_WITHOUT_FOOD=3;
+    private static final Map<String,Double> PROBABILITIES_TO_REPRODUCE=new HashMap<>();
+
+    public static final int DAYS_WITHOUT_FOOD=6;
     static {
         loadFromFile("src/main/resources/probabilities_for_eating.json",PROBABILITIES_TO_EAT);
         loadFromFile("src/main/resources/min_weight.json",MIN_WEIGHT);
+        loadFromFile("src/main/resources/probabilities_for_reproduce.json",PROBABILITIES_TO_REPRODUCE);
     }
 
     private static <T>void loadFromFile(String filePath,Map<String,T> map) {
@@ -35,5 +38,10 @@ public class Constants {
     }
     public static double getMinWeight(String animal) {
         return MIN_WEIGHT.getOrDefault(animal, 0.0);
+    }
+
+    public static double getReproduceProbability(String animal)
+    {
+        return PROBABILITIES_TO_REPRODUCE.getOrDefault(animal,0.0);
     }
 }

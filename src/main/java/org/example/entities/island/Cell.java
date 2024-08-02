@@ -24,7 +24,9 @@ public class Cell {
     }
 
     public void addPlant(Plant plant) {
+
         plants.add(plant);
+
     }
 
     public List<Animal> getAnimals() {

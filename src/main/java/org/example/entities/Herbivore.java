@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Herbivore extends Animal {
+public abstract class Herbivore extends Animal {
     public Herbivore(String name, String unicode, Coordinate coordinates, double weight, double maxNumber_onCell, int speed_of_movement, double sustenance) {
         super(name, unicode, coordinates, weight, maxNumber_onCell, speed_of_movement, sustenance);
     }
@@ -74,9 +74,8 @@ public class Herbivore extends Animal {
         }
     }
 
-
     @Override
-    protected void reproduce() {
+    protected abstract Animal createNewAnimal(Coordinate coordinates) ;
 
-    }
+
 }
