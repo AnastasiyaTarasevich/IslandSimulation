@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Constants {
-
+    public static final int ISLAND_SIZE=5;
     public static final int TIME_FOR_GROW=3;
     private static final Map<String, Map<String,Integer>> PROBABILITIES_TO_EAT=new HashMap<>();
 
