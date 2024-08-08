@@ -170,10 +170,11 @@ public class Island {
             animal.eat(this);
             if (animal.isStarving()) {
                 animalsToRemoveFromHunger.add(animal);
+                statistics.addDeadFromStarve();
             }
         });
 
-
+        int countBeforeHunger=allAnimals.size();
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 Cell cell = grid[i][j];
@@ -183,14 +184,10 @@ public class Island {
             }
         }
 
-        List<Animal> allAnimalsAfterHunger = getAllAnimals();
-        int countAfterHunger = allAnimalsAfterHunger.size();
+    statistics.addDeadAnimal(statistics.getDeadEating()+statistics.getDeadStarve());
 
 
-        int diedCountFromHunger = initialAnimalCount - countAfterHunger;
-        int diedCountFromPredation = initialAnimalCount - allAnimals.size();
 
-        statistics.addDeadAnimal(diedCountFromHunger + diedCountFromPredation);
         allAnimals.forEach(animal -> animal.reproduce(this));
         updateTotalAnimals();
         updateTotalPlants();

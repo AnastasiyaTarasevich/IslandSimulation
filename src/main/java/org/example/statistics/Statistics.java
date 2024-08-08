@@ -6,6 +6,10 @@ public class Statistics  {
     private static Statistics statistics_instance;
     private int bornAnimals;
     private int deadAnimals;
+
+    private int deadStarve;
+
+    private int deadEating;
     private int totalAnimals;
     private int grownPlants;
     private int totalPlants;
@@ -21,6 +25,8 @@ public class Statistics  {
         this.totalAnimals = 0;
         this.grownPlants = 0;
         this.totalPlants = 0;
+        this.deadStarve=0;
+        this.deadEating=0;
     }
 
     public void addBornAnimal() {
@@ -47,15 +53,35 @@ public class Statistics  {
         bornAnimals = 0;
         deadAnimals = 0;
         grownPlants = 0;
+        deadStarve=0;
+        deadEating=0;
+    }
+
+    public void addDeadFromStarve()
+    {
+        deadStarve++;
+    }
+    public void addDeadFromPredation()
+    {
+        deadEating++;
     }
 
     @Override
     public String toString() {
         return "Статистика дня:\n" +
                 "Количество рожденных животных: " + bornAnimals + "\n" +
-                "Количество умерших животных: " + deadAnimals + "\n" +
+                "Количество умерших животных: " + deadAnimals + "(от голода: "+deadStarve+","+
+                "в результате умерщвления: "+deadEating+")"+"\n" +
                 "Общее количество животныхна конец дня: " + totalAnimals + "\n" +
                 "Количество выросших растений: " + grownPlants + "\n" +
                 "Общее количество рвстений нв  конец дня:: " + totalPlants + "\n";
+    }
+
+    public int getDeadStarve() {
+        return deadStarve;
+    }
+
+    public int getDeadEating() {
+        return deadEating;
     }
 }

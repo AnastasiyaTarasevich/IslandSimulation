@@ -1,6 +1,8 @@
 package org.example.menu;
 
 import org.example.constants.Constants;
+import org.example.initializer.IslandInitializer;
+
 import java.util.Scanner;
 public class Menu {
 
@@ -8,12 +10,18 @@ public class Menu {
     public static void printStarter() {
         System.out.println("--------------------Добро пожаловать в симулцию жизни на острове!------------------");
         System.out.println("Введите начальные параметры или оставьте по умолчанию\n");
-        getIslandSize();
-        getTimeForPlants();
-        getTimeForAnimals();
-        getConditions();
+
+
+        Constants.setIslandSize(getIslandSize());
+        Constants.setTimeForGrow(getTimeForPlants());
+        Constants.setDaysWithoutFood(getTimeForAnimals());
+        Constants.setCONDITION(getConditions());
+        System.out.println("\nНачальное состояние острова\n");
+        IslandInitializer app = IslandInitializer.getInstance(Constants.ISLAND_SIZE);
+        app.displayInitialIsland();
+        app.displayIsland();
     }
-    static int getIslandSize() {
+   public static int getIslandSize() {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Введите размер острова  (или нажмите Enter для использования размера по умолчанию "+ Constants.ISLAND_SIZE+"*" +Constants.ISLAND_SIZE+"): ");
@@ -28,7 +36,7 @@ public class Menu {
         }
         return number;
     }
-    static int getTimeForPlants() {
+   public static int getTimeForPlants() {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Введите количество дней для роста растенмй в каждой клетке  (или нажмите Enter для использования дней по умолчанию "+ Constants.TIME_FOR_GROW+"): ");
@@ -44,7 +52,7 @@ public class Menu {
         return number;
     }
 
-    static int getTimeForAnimals() {
+  public   static int getTimeForAnimals() {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Введите количество дней, которые животные могут выдержать без еды  (или нажмите Enter для использования дней по умолчанию "+ Constants.DAYS_WITHOUT_FOOD+"): ");
@@ -60,7 +68,7 @@ public class Menu {
         return number;
     }
 
-    static int getConditions()
+   public static int getConditions()
     {
         Scanner scanner = new Scanner(System.in);
 

@@ -146,7 +146,20 @@ public class IslandInitializer {
     {
         int herbivoreCount=getIslandObjectCount(Herbivore.class);
         int predatorCount=getIslandObjectCount(Predator.class);
-        return getUniqueAnimalTypesCount()<=0;
+        int uniqueTypes=getUniqueAnimalTypesCount();
+        int condition=Constants.CONDITION;
+        switch(condition)
+        {
+            case 1:
+                return uniqueTypes==0;
+            case 2:
+                return herbivoreCount==0 && predatorCount>0;
+            case 3:
+                return uniqueTypes<=2;
+            default:
+                return false;
+        }
+
     }
 
 }

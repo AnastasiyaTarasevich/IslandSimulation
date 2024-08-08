@@ -4,6 +4,7 @@ import org.example.constants.Constants;
 import org.example.entities.abstracts.Animal;
 import org.example.entities.island.Cell;
 import org.example.entities.island.Island;
+import org.example.statistics.Statistics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ public abstract class Predator extends Animal {
 
     @Override
     public void eat(Island island) {
+        Statistics statistics=Statistics.getInstance();
         Cell cell = island.getGrid(coordinates.getX(), coordinates.getY());
         List<Animal> animalsInCell;
         boolean hasEaten = false;
@@ -28,6 +30,7 @@ public abstract class Predator extends Animal {
                 if (ThreadLocalRandom.current().nextInt(100) < probability) {
                     synchronized (cell) {
                         cell.removeAnimal(animal);
+                        statistics.addDeadFromPredation();
                         this.resetDaysWithoutFood();
                         this.foodConsumed += animal.getWeight();
                         hasEaten = true;
